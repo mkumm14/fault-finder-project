@@ -54,7 +54,7 @@ export default function SignUpPage() {
             <div className={'flex justify-end items-center m-5 space-x-3'}>
                 <p className={''}>don&apos;t have an account?</p>
                 <Button asChild>
-                    <Link href={'/login'}>Login</Link>
+                    <Link href={'/auth/login'}>Login</Link>
                 </Button>
             </div>
 

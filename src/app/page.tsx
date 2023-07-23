@@ -8,7 +8,7 @@ export default function Home() {
 
           <div>Welcome to Fault Finder</div>
           <Button asChild>
-          <Link href={'/login'}>Get Started</Link>
+          <Link href={'/auth/login'}>Get Started</Link>
           </Button>
       </div>
   )
