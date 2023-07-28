@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import {useForm} from "react-hook-form";
+import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
+import {useRouter} from "next/navigation";
+import {useToast} from "@/components/ui/use-toast";
 
 const formSchema = z.object({
     email: z.string().nonempty({
@@ -37,11 +40,30 @@ export default function LoginPage() {
         },
     })
 
+    const supabase = createClientComponentClient()
+    const {toast} = useToast()
+
+    const router = useRouter()
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log(values)
+
+        const {email, password} = values
+
+        await supabase.auth.signInWithPassword(
+            {
+                email:email,
+                password:password
+            }
+        )
+
+        toast({
+            description:"successfully signed in."
+        })
+
+        router.refresh()
+
     }
 
     return (
