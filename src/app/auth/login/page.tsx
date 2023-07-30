@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { zodResolver } from "@hookform/resolvers/zod"
+import {zodResolver} from "@hookform/resolvers/zod"
 import * as z from "zod"
 
-import { Button } from "@/components/ui/button"
+import {Button} from "@/components/ui/button"
 import {
     Form,
     FormControl,
@@ -13,7 +13,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import {Input} from "@/components/ui/input"
 import {useForm} from "react-hook-form";
 import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
 import {useRouter} from "next/navigation";
@@ -21,12 +21,12 @@ import {useToast} from "@/components/ui/use-toast";
 
 const formSchema = z.object({
     email: z.string().nonempty({
-        message:'This is required'
+        message: 'This is required'
     }).email({
-        message:"Invalid email"
+        message: "Invalid email"
     }),
     password: z.string().nonempty({
-        message:'This is required'
+        message: 'This is required'
     })
 })
 
@@ -44,6 +44,7 @@ export default function LoginPage() {
     const {toast} = useToast()
 
     const router = useRouter()
+
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
@@ -51,18 +52,25 @@ export default function LoginPage() {
 
         const {email, password} = values
 
-        await supabase.auth.signInWithPassword(
+        const {data, error} = await supabase.auth.signInWithPassword(
             {
-                email:email,
-                password:password
+                email: email,
+                password: password
             }
         )
+        if (error) {
+            console.log(error.message)
+            toast({
+                description: `${error.message}`,
+                variant: "destructive",
+            })
+        } else {
+            toast({
+                description: "successfully signed in."
+            })
 
-        toast({
-            description:"successfully signed in."
-        })
-
-        router.refresh()
+            router.refresh()
+        }
 
     }
 
@@ -84,26 +92,26 @@ export default function LoginPage() {
                         <FormField
                             control={form.control}
                             name="email"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
                                         <Input placeholder="email" {...field} />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
                         <FormField
                             control={form.control}
                             name="password"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
                                         <Input placeholder="password" type={'password'} {...field} />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
