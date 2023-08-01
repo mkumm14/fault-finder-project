@@ -4,7 +4,13 @@ export default function DashboardPage()
 {
     return (
         <>
-            This is Dashboard Page.
+            <div>
+
+
+                this is dashboard page
+
+
+            </div>
         </>
     )
 }
